@@ -7073,14 +7073,14 @@
     "4447": {
       "events": {},
       "links": {
-        "ListLib": "0x8d0e399684B9016b853fa464Ed2bACDA2bCFC9A7"
+        "ListLib": "0xE6558b4977015BFE50F18e4cFAD60164a1A0B97D"
       },
-      "address": "0x94d3f39a987F1d32C16dd11B4a02B4C3D467a487",
-      "transactionHash": "0x330822d1d7979f2cab37a587665f7b85879c3e4d493ef51f0dececb0803b37ef"
+      "address": "0xc5d351B5326f40D665624C8583EAD533134171fc",
+      "transactionHash": "0x42b12ff6fccf19a8ce9e121b0e63b2a65a10d95e67f6d1000d6ab383d0ba7182"
     }
   },
   "schemaVersion": "3.0.0-beta.2",
-  "updatedAt": "2018-11-27T05:12:01.109Z",
+  "updatedAt": "2018-11-27T23:34:16.925Z",
   "devdoc": {
     "details": "This contract's goal is to make it easy for anyone to manage existing and new delagated wallets",
     "methods": {

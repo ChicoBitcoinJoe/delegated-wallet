@@ -22,14 +22,15 @@ module.exports = function(deployer, network, accounts) {
     .then(() => deployer.deploy(TokenGenerator, MiniMeToken.address))
     .then(() => MiniMeToken.deployed())
     .then(instance => {
-        instance.changeController(TokenGenerator.address)
-        .then(txReceipt => {
-            // successfully initialized
-            console.log("Finished deploying contracts");
-        })
-        .catch(err => {
-            // successfully initialized
-            console.log("Finished deploying contracts");
-        })
+        return instance.controller()
+        .then(controller => {
+            if(controller != TokenGenerator.address){
+                return instance.changeController(TokenGenerator.address)
+            }
+            else {
+                return Promise.resolve();
+            }
+        }) 
     })
+    .then(txReceipt => console.log("Finished deploying contracts"))
 };

@@ -2103,12 +2103,12 @@
     "4447": {
       "events": {},
       "links": {},
-      "address": "0xCa647F0271Fbd0De70117B6089548c1d013D1f29",
-      "transactionHash": "0x1a552ea16c67f00f3a59f9d7dac44c07a03cf16ca6ad712c1430297b48e7e02a"
+      "address": "0x32406026F68cD38Ed0B60ab87880863A36735fa2",
+      "transactionHash": "0x48f445e584e575cb609eba66b1e18d35643f7753fc03a5ab79e2c023736938ee"
     }
   },
   "schemaVersion": "3.0.0-beta.2",
-  "updatedAt": "2018-11-27T05:12:01.080Z",
+  "updatedAt": "2018-11-27T23:34:16.915Z",
   "devdoc": {
     "methods": {
       "onApprove(address,address,uint256)": {

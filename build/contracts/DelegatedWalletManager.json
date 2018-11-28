@@ -7070,6 +7070,14 @@
     "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
   },
   "networks": {
+    "42": {
+      "events": {},
+      "links": {
+        "ListLib": "0x89C8B67d4bc2005C6AE49dd86b0CBE20415c5Fa6"
+      },
+      "address": "0x918a076aD2feaCF339C0529d73D82c16702AAc97",
+      "transactionHash": "0x8c49f6e2c3e1b04d625a678345ff36b1eec4e475782f7ce1e637c6f53d0a7709"
+    },
     "4447": {
       "events": {},
       "links": {
@@ -7080,7 +7088,7 @@
     }
   },
   "schemaVersion": "3.0.0-beta.2",
-  "updatedAt": "2018-11-27T23:34:16.925Z",
+  "updatedAt": "2018-11-28T00:00:15.373Z",
   "devdoc": {
     "details": "This contract's goal is to make it easy for anyone to manage existing and new delagated wallets",
     "methods": {

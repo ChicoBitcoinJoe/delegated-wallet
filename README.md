@@ -35,11 +35,11 @@ The following delegates are completely decentralized and immune to tampering or 
 | Decentralized Delegates | Contract Address |
 | --- | --- |
 | Alarm Clock Factory | coming soon |
-| Recurring Payment Scheduler - Simple | coming soon |
+| Payment Scheduler - Simple | coming soon |
 
 ## Everchain Delegates
 
-The Everchain Delegates are owned and secured by the Everchain Project but it allows seamless access to new and upgraded contracts for users who would prefer a hands off approach every time a new or better plugin comes along.
+The Everchain Delegates are owned and secured by the Everchain Project but it allows seamless access to new and upgraded contracts for users who would prefer a hands off approach every time a new or better delegate comes along.
 
 *todo: outline security practices*
 

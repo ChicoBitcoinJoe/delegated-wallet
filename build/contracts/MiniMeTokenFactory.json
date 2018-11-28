@@ -13315,20 +13315,20 @@
                 {
                   "externalReferences": [
                     {
-                      "_addr": {
-                        "declaration": 2115,
-                        "isOffset": false,
-                        "isSlot": false,
-                        "src": "22014:5:9",
-                        "valueSize": 1
-                      }
-                    },
-                    {
                       "size": {
                         "declaration": 2121,
                         "isOffset": false,
                         "isSlot": false,
                         "src": "21994:4:9",
+                        "valueSize": 1
+                      }
+                    },
+                    {
+                      "_addr": {
+                        "declaration": 2115,
+                        "isOffset": false,
+                        "isSlot": false,
+                        "src": "22014:5:9",
                         "valueSize": 1
                       }
                     }
@@ -28257,20 +28257,20 @@
                 {
                   "externalReferences": [
                     {
-                      "_addr": {
-                        "declaration": 2115,
-                        "isOffset": false,
-                        "isSlot": false,
-                        "src": "22014:5:9",
-                        "valueSize": 1
-                      }
-                    },
-                    {
                       "size": {
                         "declaration": 2121,
                         "isOffset": false,
                         "isSlot": false,
                         "src": "21994:4:9",
+                        "valueSize": 1
+                      }
+                    },
+                    {
+                      "_addr": {
+                        "declaration": 2115,
+                        "isOffset": false,
+                        "isSlot": false,
+                        "src": "22014:5:9",
                         "valueSize": 1
                       }
                     }
@@ -29937,6 +29937,12 @@
     "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
   },
   "networks": {
+    "42": {
+      "events": {},
+      "links": {},
+      "address": "0x06B520a6905347B9E819F28170382ff9f192acF6",
+      "transactionHash": "0xfb12d79d2ffe591a804034d5eaed95d82f6e72a885709eb7925d172ec857bad0"
+    },
     "4447": {
       "events": {},
       "links": {},
@@ -29945,7 +29951,7 @@
     }
   },
   "schemaVersion": "3.0.0-beta.2",
-  "updatedAt": "2018-11-27T23:34:16.955Z",
+  "updatedAt": "2018-11-28T00:00:15.431Z",
   "devdoc": {
     "methods": {
       "createCloneToken(address,uint256,string,uint8,string,bool)": {

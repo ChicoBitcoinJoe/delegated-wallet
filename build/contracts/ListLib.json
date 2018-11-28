@@ -5059,6 +5059,12 @@
     "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
   },
   "networks": {
+    "42": {
+      "events": {},
+      "links": {},
+      "address": "0x89C8B67d4bc2005C6AE49dd86b0CBE20415c5Fa6",
+      "transactionHash": "0x41c6afe88d23447ba3af2d2eebc74a01484310ca1de8c622894631f633c92166"
+    },
     "4447": {
       "events": {},
       "links": {},
@@ -5067,7 +5073,7 @@
     }
   },
   "schemaVersion": "3.0.0-beta.2",
-  "updatedAt": "2018-11-27T23:34:16.925Z",
+  "updatedAt": "2018-11-28T00:00:15.353Z",
   "devdoc": {
     "details": "A library for a simple unordered list that stores unique values.",
     "methods": {

@@ -7,7 +7,7 @@ import "./DelegatedWallet.sol";
 /// @author Joseph Reed
 /// @dev The DelegatedWalletFactory makes it easy to deploy delegated wallet. It provides several
 ///      helper functions to deploy a wallet in several ways
-contract DelegatedWalletFactory is CloneFactory {
+contract DelegatedWalletFactory is CloneFactory, IDelegatedWalletFactory {
     
     uint public blockCreated;           // The block the factory was deployed
     address public blueprint;   // The delegated wallet blueprint to supply the clone factory
@@ -23,16 +23,17 @@ contract DelegatedWalletFactory is CloneFactory {
     /// @param owner The owner of the delegated wallet
     /// @param delegates The owner of the delegated wallet
     /// @return The delegated wallet address
-    function createWallet (address owner, address[] memory delegates) public returns (DelegatedWallet wallet) {
+    function createWallet (address owner, address[] memory delegates) public payable returns (IDelegatedWallet) {
         // see https://solidity.readthedocs.io/en/v0.5.0/050-breaking-changes.html?highlight=address_make_payable for converting to payable addresses
         address payable clone = address(uint160(createClone(blueprint)));
-        wallet = DelegatedWallet(clone);
+        DelegatedWallet wallet = DelegatedWallet(clone);
         wallet.initialize(address(this));
 
         for(uint i = 0; i < delegates.length; i++)
             wallet.addDelegate(delegates[i]);
         
         wallet.transferOwnership(owner);
+        address(wallet).transfer(msg.value);
 
         emit CreateWallet_event(msg.sender, owner, address(wallet));
     }

@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 import "./external/ERC20.sol";
 import "./external/Owned.sol";
 import "./external/ListLib.sol";
-import "./Interfaces.sol";
+import "./IDelegatedWallet.sol";
 
 /// @title DelegatedWallet Contract
 /// @author Joseph Reed

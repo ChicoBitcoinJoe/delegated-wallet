@@ -23,10 +23,10 @@ contract DelegatedWalletManager {
     /// @param delegates A list of predefined delegates to add to the wallet
     /// @return True if the wallet was successfully created
     function createWallet (DelegatedWalletFactory factory, address[] memory delegates) 
-    public returns (DelegatedWallet wallet) {
+    public payable returns (IDelegatedWallet wallet) {
         require(address(factory) != address(0x0));
 
-        wallet = factory.createWallet(msg.sender, delegates);
+        wallet = factory.createWallet.value(msg.value)(msg.sender, delegates);
         require(address(wallet) != address(0x0));
         
         wallets[msg.sender].add(address(wallet));

@@ -1,6 +1,7 @@
 pragma solidity ^0.5.0;
 
-import "./DelegatedWalletFactory.sol";
+import "./external/ListLib.sol";
+import "./IDelegatedWallet.sol";
 
 /// @title DelegatedWalletManager Contract
 /// @author Joseph Reed
@@ -22,7 +23,7 @@ contract DelegatedWalletManager {
     /// @param factory Deploys a new delegated wallet from the provided 'factory'
     /// @param delegates A list of predefined delegates to add to the wallet
     /// @return True if the wallet was successfully created
-    function createWallet (DelegatedWalletFactory factory, address[] memory delegates) 
+    function createWallet (IDelegatedWalletFactory factory, address[] memory delegates) 
     public payable returns (IDelegatedWallet wallet) {
         require(address(factory) != address(0x0));
 
@@ -36,7 +37,7 @@ contract DelegatedWalletManager {
     /// @notice Adds a wallet to the account list.
     /// @param wallet The delegated wallet to add to the account list
     /// @return True if the wallet was successfully added
-    function addWallet (DelegatedWallet wallet) public returns (bool success) {
+    function addWallet (IDelegatedWallet wallet) public returns (bool success) {
         success = wallets[msg.sender].add(address(wallet));
         emit AddWallet_event(msg.sender, address(wallet));
     }
@@ -44,7 +45,7 @@ contract DelegatedWalletManager {
     /// @notice Removes a wallet from the account list.
     /// @param wallet The delegated wallet to remove from the account list
     /// @return True if the wallet was successfully removed
-    function removeWallet (DelegatedWallet wallet) public returns (bool success) {
+    function removeWallet (IDelegatedWallet wallet) public returns (bool success) {
         success = wallets[msg.sender].remove(address(wallet));
         if(success)
             emit RemoveWallet_event(msg.sender, address(wallet));
@@ -68,7 +69,7 @@ contract DelegatedWalletManager {
     /// @param account The given account to check
     /// @param wallet The given wallet to check for
     /// @return True if the given wallet exists an accounts wallet list
-    function contains (address account, DelegatedWallet wallet) public view returns (bool) {
+    function contains (address account, IDelegatedWallet wallet) public view returns (bool) {
         return wallets[account].contains(address(wallet));
     }
 
@@ -76,15 +77,15 @@ contract DelegatedWalletManager {
     /// @param account The given account to check
     /// @param i The index to check
     /// @return The wallet address that exists at index 'i' in the 'account' wallet list
-    function index (address account, uint i) public view returns (DelegatedWallet) {
-        return DelegatedWallet(address(uint160(wallets[account].index(i))));
+    function index (address account, uint i) public view returns (IDelegatedWallet) {
+        return IDelegatedWallet(address(uint160(wallets[account].index(i))));
     }
 
     /// @notice Fetches the index of a given 'wallet' from a given 'account' wallet list
     /// @param account The given account to check
     /// @param wallet The given wallet to check
     /// @return The current index of 'wallet' in 'account' wallet list
-    function indexOf (address account, DelegatedWallet wallet) public view returns (uint) {
+    function indexOf (address account, IDelegatedWallet wallet) public view returns (uint) {
         return wallets[account].indexOf(address(wallet));
     }
 

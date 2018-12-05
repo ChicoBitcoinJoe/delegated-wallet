@@ -20,8 +20,8 @@ contract DelegatedWalletManager {
     }
 
     /// @notice Adds a wallet to the account list.
-    /// @param delegates A list of predefined delegates to add to the wallet
     /// @param factory The delegated wallet is deployed from the provided 'factory'
+    /// @param delegates A list of predefined delegates to add to the wallet
     /// @return True if the wallet was successfully created
     function createWallet (IDelegatedWalletFactory factory, address[] memory delegates) public payable returns (IDelegatedWallet wallet) {
         wallet = factory.createWallet(msg.sender, delegates);

@@ -13,25 +13,22 @@ contract DelegatedWalletManager {
     uint public blockCreated;                           // The block the factory was deployed
     
     mapping (address => ListLib.AddressList) wallets;   // The list of wallets added by each account
-
+    
     /// @notice Constructor to create a DelegatedWalletManager
     constructor () public {
         blockCreated = block.number;
     }
 
     /// @notice Adds a wallet to the account list.
-    /// @param factory Deploys a new delegated wallet from the provided 'factory'
     /// @param delegates A list of predefined delegates to add to the wallet
+    /// @param factory The delegated wallet is deployed from the provided 'factory'
     /// @return True if the wallet was successfully created
-    function createWallet (IDelegatedWalletFactory factory, address[] memory delegates) 
-    public payable returns (IDelegatedWallet wallet) {
-        require(address(factory) != address(0x0));
-
-        wallet = factory.createWallet.value(msg.value)(msg.sender, delegates);
+    function createWallet (IDelegatedWalletFactory factory, address[] memory delegates) public payable returns (IDelegatedWallet wallet) {
+        wallet = factory.createWallet(msg.sender, delegates);
         require(address(wallet) != address(0x0));
-        
-        wallets[msg.sender].add(address(wallet));
-        emit CreateWallet_event(address(factory), msg.sender, address(wallet));
+
+        wallets[msg.sender].add(address(wallet));        
+        emit AddWallet_event(msg.sender, address(wallet));
     }
 
     /// @notice Adds a wallet to the account list.
@@ -89,8 +86,7 @@ contract DelegatedWalletManager {
         return wallets[account].indexOf(address(wallet));
     }
 
-    event AddWallet_event(address indexed owner, address wallet);
-    event CreateWallet_event(address indexed factory, address indexed owner, address wallet);
-    event RemoveWallet_event(address indexed owner, address wallet);
+    event AddWallet_event(address owner, address wallet);
+    event RemoveWallet_event(address owner, address wallet);
 
 }

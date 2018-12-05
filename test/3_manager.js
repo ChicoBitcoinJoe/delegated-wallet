@@ -10,8 +10,9 @@ contract('Delegated Wallet Manager', accounts => {
 
     var CreatedWallet;
     var AddedWallet;
+    var RemovedWallet;
 
-    var owner = accounts[0];
+    var owner = null;
     var delegate = accounts[1];
 
     it("deploy the delegated wallet manager", () => {
@@ -43,19 +44,19 @@ contract('Delegated Wallet Manager', accounts => {
     it("create a new wallet", () => {
         return WalletManager.createWallet(WalletFactory.address, [delegate])
         .then(tx => {
-            assert(tx.logs[0].event == "CreateWallet_event", "Did not detect creation of new wallet");
+            //console.log(tx.logs[0].args);
+            assert(tx.logs[0].event == "AddWallet_event", "Did not detect addition of new wallet");
             CreatedWallet = tx.logs[0].args.wallet;
-        })
-        .catch(err => {
-            assert(false, "Failed to create a new wallet");
+            owner = tx.logs[0].args.owner;
+            return WalletManager.getWallets(owner)
         })
     });
 
     it("add a wallet", () => {
-        var walletToBeAdded;
         return WalletFactory.createWallet(owner, [delegate])
         .then(tx => {
-            assert(tx.logs[0].event == "CreateWallet_event", "Did not detect creation of new wallet");
+            //console.log(tx.logs[0].args)
+            assert(tx.logs[0].event == "CreateWallet_event", "Did not detect addition of new wallet");
             AddedWallet = tx.logs[0].args.wallet;
             return WalletManager.addWallet(AddedWallet);
         })
@@ -67,11 +68,16 @@ contract('Delegated Wallet Manager', accounts => {
     it("removes a wallet", () => {
         return WalletManager.createWallet(WalletFactory.address, [delegate])
         .then(tx => {
-            assert(tx.logs[0].event == "CreateWallet_event", "Did not detect creation of new wallet");
-            return WalletManager.removeWallet(tx.logs[0].args.wallet);
+            //console.log(tx.logs[0].args);
+            assert(tx.logs[0].event == "AddWallet_event", "Did not detect addition of new wallet");
+            RemovedWallet = tx.logs[0].args.wallet;
+            owner = tx.logs[0].args.owner;
+
+            return WalletManager.removeWallet(RemovedWallet);
         })
         .then(tx => {
-            assert(tx.logs[0].event == "RemoveWallet_event", "Did not detect removal of wallet");
+            assert(tx.logs[0].event == "RemoveWallet_event", "Did not detect removal of new wallet");
+            return WalletManager.removeWallet(tx.logs[0].args.wallet);
         })
     });
 
@@ -79,9 +85,9 @@ contract('Delegated Wallet Manager', accounts => {
         return Promise.all([
             WalletManager.getWallets(owner),
             WalletManager.totalWallets(owner),
-            WalletManager.contains(owner, Wallet.address),
             WalletManager.contains(owner, CreatedWallet),
             WalletManager.contains(owner, AddedWallet),
+            WalletManager.contains(owner, RemovedWallet),
             WalletManager.index(owner, 0),
             WalletManager.index(owner, 1),
             WalletManager.indexOf(owner, CreatedWallet),
@@ -90,20 +96,20 @@ contract('Delegated Wallet Manager', accounts => {
         .then(promises => {
             var walletArray = promises[0];
             var totalWallets = promises[1];
-            var walletArrayContainsWallet = promises[2];
-            var walletArrayContainsCreatedWallet = promises[3];
-            var walletArrayContainsAddedWallet = promises[4];
+            var walletArrayContainsCreatedWallet = promises[2];
+            var walletArrayContainsAddedWallet = promises[3];
+            var walletArrayContainsRemovedWallet = promises[4];
             var walletAtIndex0 = promises[5];
             var walletAtIndex1 = promises[6];
             var indexOfCreatedWallet = promises[7];
             var indexOfAddedWallet = promises[8];
 
-            assert(walletArray[0] == CreatedWallet, "wallet array does not match expected");
-            assert(walletArray[1] == AddedWallet, "wallet array does not match expected");
-            assert(totalWallets == walletArray.length, "total wallets does not equal wallet array length");
-            assert(walletArrayContainsWallet == false, "wallet should not contain the blueprint wallet");
+            assert(walletArray[0] == CreatedWallet, "wallet array [0] does not match expected");
+            assert(walletArray[1] == AddedWallet, "wallet array [1] does not match expected");
+            assert(walletArray.length == totalWallets, "total wallets does not equal wallet array length");
             assert(walletArrayContainsCreatedWallet == true, "wallet array should contain created wallet");
             assert(walletArrayContainsAddedWallet == true, "wallet array should contain added wallet");
+            assert(walletArrayContainsRemovedWallet == false, "wallet should not contain the blueprint wallet");
             assert(walletAtIndex0 == CreatedWallet, "the wallet at index 0 should be the created wallet");
             assert(walletAtIndex1 == AddedWallet, "the wallet at index 1 should be the created wallet");
             assert(indexOfCreatedWallet == 0, "the index of the created wallet should equal 0");

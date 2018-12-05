@@ -7,7 +7,7 @@ import "./DelegatedWallet.sol";
 /// @author Joseph Reed
 /// @dev The DelegatedWalletFactory makes it easy to deploy delegated wallet. It provides several
 ///      helper functions to deploy a wallet in several ways
-contract DelegatedWalletFactory is CloneFactory, IDelegatedWalletFactory {
+contract DelegatedWalletFactory is IDelegatedWalletFactory, CloneFactory {
     
     uint public blockCreated;           // The block the factory was deployed
     address public blueprint;   // The delegated wallet blueprint to supply the clone factory
@@ -33,11 +33,15 @@ contract DelegatedWalletFactory is CloneFactory, IDelegatedWalletFactory {
             wallet.addDelegate(delegates[i]);
         
         wallet.transferOwnership(owner);
-        address(wallet).transfer(msg.value);
+        
+        if(msg.value > 0)
+            address(wallet).transfer(msg.value);
 
         emit CreateWallet_event(msg.sender, owner, address(wallet));
+
+        return wallet;
     }
     
-    event CreateWallet_event (address indexed caller, address indexed owner, address wallet);
+    event CreateWallet_event (address caller, address owner, address wallet);
     
 }

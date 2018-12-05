@@ -17,20 +17,33 @@ module.exports = function(deployer, network, accounts) {
     .then(() => deployer.deploy(DelegatedWallet))
     .then(() => deployer.deploy(DelegatedWalletFactory, DelegatedWallet.address))
     .then(() => deployer.deploy(DelegatedWalletManager))
-    .then(() => deployer.deploy(MiniMeTokenFactory))
-    .then(() => deployer.deploy(MiniMeToken, MiniMeTokenFactory.address, '0x0000000000000000000000000000000000000000', 0, 'Test Token', 18, 'tkn', true))
+    .then(() => deployer.deploy(MiniMeTokenFactory, {overwrite: false}))
+    .then(() => deployer.deploy(MiniMeToken, 
+        MiniMeTokenFactory.address,
+        '0x0000000000000000000000000000000000000000', 
+        0, 
+        "Test ERC20 Token",
+        18,
+        "tkn",
+        true
+    ))
     .then(() => deployer.deploy(TokenGenerator, MiniMeToken.address))
     .then(() => MiniMeToken.deployed())
     .then(instance => {
         return instance.controller()
         .then(controller => {
-            if(controller != TokenGenerator.address){
-                return instance.changeController(TokenGenerator.address)
-            }
-            else {
-                return Promise.resolve();
-            }
-        }) 
+            console.log(controller, TokenGenerator.address);
+            if(controller != TokenGenerator.address)
+                return instance.changeController(TokenGenerator.address, {from: controller})
+            else
+                return Promise.resolve()
+        })
+        .catch(err => {
+            //console.log(err)
+            //console.error(err)
+        })
     })
-    .then(txReceipt => console.log("Finished deploying contracts"))
+    .then(() => {
+        console.log("Finished deploying contracts")
+    })
 };

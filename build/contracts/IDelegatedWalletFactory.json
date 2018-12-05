@@ -1,101 +1,27 @@
 {
-  "contractName": "IDelegatedWallet",
+  "contractName": "IDelegatedWalletFactory",
   "abi": [
     {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "name": "delegates",
+          "type": "address[]"
+        }
+      ],
+      "name": "createWallet",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
       "payable": true,
       "stateMutability": "payable",
-      "type": "fallback"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "token",
-          "type": "address"
-        },
-        {
-          "name": "recipient",
-          "type": "address"
-        },
-        {
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "transfer",
-      "outputs": [
-        {
-          "name": "success",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "callAddress",
-          "type": "address"
-        },
-        {
-          "name": "callData",
-          "type": "bytes"
-        }
-      ],
-      "name": "call",
-      "outputs": [
-        {
-          "name": "success",
-          "type": "bool"
-        },
-        {
-          "name": "returnData",
-          "type": "bytes"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "token",
-          "type": "address"
-        }
-      ],
-      "name": "balanceOf",
-      "outputs": [
-        {
-          "name": "balance",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_address",
-          "type": "address"
-        }
-      ],
-      "name": "isDelegate",
-      "outputs": [
-        {
-          "name": "success",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
       "type": "function"
     }
   ],

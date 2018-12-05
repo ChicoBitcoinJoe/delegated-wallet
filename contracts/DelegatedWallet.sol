@@ -59,8 +59,8 @@ contract DelegatedWallet is Owned, IDelegatedWallet {
     /// @param callAddress The address of the token to transfer
     /// @param callData The address of the recipient
     /// @return success returns true if the call throws no errors. returnData contains the returned result of the call
-    function call(address callAddress, bytes memory callData) public onlyDelegates returns (bool success, bytes memory returnData) {
-        (success, returnData) = callAddress.call(callData);
+    function call(address callAddress, uint callValue, bytes memory callData) public onlyDelegates returns (bool success, bytes memory returnData) {
+        (success, returnData) = callAddress.call(callValue)(callData);
 
         emit Call_event(msg.sender, callAddress, callData, returnData, success);
     }

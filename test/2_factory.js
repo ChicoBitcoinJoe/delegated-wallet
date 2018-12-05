@@ -37,6 +37,7 @@ contract('Delegated Wallet Factory', accounts => {
     it("create a new wallet", () => {
         return WalletFactory.createWallet(owner, [delegate])
         .then(tx => {
+            //console.log(tx.logs[0].args)
             assert(tx.logs[0].event == "CreateWallet_event", "Did not detect creation of new wallet");
         })
         .catch(err => {

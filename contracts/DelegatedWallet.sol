@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 import "./external/ERC20.sol";
 import "./external/Owned.sol";
 import "./external/ListLib.sol";
-import "./Interfaces.sol";
+import "./IDelegatedWallet.sol";
 
 /// @title DelegatedWallet Contract
 /// @author Joseph Reed
@@ -30,6 +30,15 @@ contract DelegatedWallet is Owned, IDelegatedWallet {
         owner = _owner;
     }
 
+    /// @notice Allows accepting Ether as a payment
+    function () external payable {
+        emit Deposit_event(msg.sender, msg.value);
+    }
+
+///////////////////////////
+/// Delegate Functions
+///////////////////////////
+
     /// @notice Send 'amount' of 'tokens' to 'recipient'
     /// @param token The address of the token to transfer
     /// @param recipient The address of the recipient
@@ -46,25 +55,19 @@ contract DelegatedWallet is Owned, IDelegatedWallet {
         emit Transfer_event(msg.sender, token, recipient, amount, success);
     }
 
-    /// @notice Approve 'amount' of 'tokens' to 'recipient'
-    /// @param token The address of the token to approve
-    /// @param recipient The address of the recipient
-    /// @param amount The amount of tokens to be approved
-    /// @return True if the transfer was successful
-    function approve (address token, address recipient, uint amount) public returns (bool success) {
-        require(isDelegate(msg.sender), "only a delegate can approve tokens sends");
+    /// @notice Send 'amount' of 'tokens' to 'recipient'
+    /// @param callAddress The address of the token to transfer
+    /// @param callData The address of the recipient
+    /// @return success returns true if the call throws no errors. returnData contains the returned result of the call
+    function call(address callAddress, uint callValue, bytes memory callData) public onlyDelegates returns (bool success, bytes memory returnData) {
+        (success, returnData) = callAddress.call.value(callValue)(callData);
 
-        success = ERC20(token).approve(recipient, amount);
-        
-        emit Approve_event(msg.sender, token, recipient, amount, success);
+        emit Call_event(msg.sender, callAddress, callData, returnData, success);
     }
 
-    function balanceOf (address token) public view returns (uint balance) {
-        if(token == address(0x0))
-            balance = address(this).balance;
-        else
-            balance = ERC20(token).balanceOf(address(this));
-    }
+///////////////////////////
+/// Owner Functions
+///////////////////////////
 
     /// @notice Add a new delegate to the list of delegates
     /// @param delegate The address of the new delegate
@@ -84,6 +87,20 @@ contract DelegatedWallet is Owned, IDelegatedWallet {
         
         if(success)
             emit RemoveDelegate_event(delegate);
+    }
+
+///////////////////////////
+/// Getter Functions
+///////////////////////////
+
+    /// @notice Gets the balance of the provided token
+    /// @param token The token to fetch the balance of. address(0x0) == native ether
+    /// @return The balance of the specified token
+    function balanceOf (address token) public view returns (uint balance) {
+        if(token == address(0x0))
+            balance = address(this).balance;
+        else
+            balance = ERC20(token).balanceOf(address(this));
     }
 
     /// @notice Determine if a given address is a delegate of this wallet
@@ -120,9 +137,13 @@ contract DelegatedWallet is Owned, IDelegatedWallet {
         return delegates.getLength();
     }
 
-    /// @notice Allows accepting Ether as a payment
-    function () external payable {
-        emit Deposit_event(msg.sender, msg.value);
+///////////////////////////
+/// Events and Modifiers
+///////////////////////////
+
+    modifier onlyDelegates () {
+        require(isDelegate(msg.sender), "only a delegate can call this function");
+        _;
     }
 
     event Deposit_event (address indexed sender, uint amount);
@@ -135,11 +156,11 @@ contract DelegatedWallet is Owned, IDelegatedWallet {
         uint amount, 
         bool success
     );
-    event Approve_event (
+    event Call_event(
         address indexed delegate, 
-        address indexed token, 
-        address indexed recipient, 
-        uint amount, 
+        address indexed callAddress, 
+        bytes callData, 
+        bytes returnData, 
         bool success
     );
 

@@ -5,8 +5,8 @@ A delegated wallet uses a plugin like approach for letting decentralized applica
 | Kovan Contract | Contract Address |
 | --- | --- |
 | ERC20 Token Despenser | 0x9dbF1C4466cD60B61665a6dE09cb018772Ff7aE7 |
-| Delegated Wallet Blueprint | 0x649d8d828Cfa25e5C67Cd0b653caf064bb872aec |
-| Delegated Wallet Factory | 0xA423025A3fD19142408313c32C664CE4F584441f |
+| Delegated Wallet Blueprint | 0x14046A2BE8424DbD4CE78aBcf48cAd7Ed8f87875 |
+| Delegated Wallet Factory | 0x9259EB9081c4f19277cedF87f22B5841E24f7D7d |
 | Delegated Wallet Manager | 0xEd6b8b05dccE7eB37f3A3435beb125f2D3DF76f9 |
 
 ## Decentralized Delegates

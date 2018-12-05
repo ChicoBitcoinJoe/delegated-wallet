@@ -9,14 +9,14 @@ var MiniMeToken = artifacts.require("MiniMeToken");
 var TokenGenerator = artifacts.require("TokenGenerator");
 
 module.exports = function(deployer, network, accounts) {
-    deployer.deploy(ListLib)
+    deployer.deploy(ListLib, {overwrite: false})
     .then(() => {
         deployer.link(ListLib, DelegatedWallet);
         deployer.link(ListLib, DelegatedWalletManager);
     })
     .then(() => deployer.deploy(DelegatedWallet))
     .then(() => deployer.deploy(DelegatedWalletFactory, DelegatedWallet.address))
-    .then(() => deployer.deploy(DelegatedWalletManager))
+    .then(() => deployer.deploy(DelegatedWalletManager, {overwrite: false}))
     .then(() => deployer.deploy(MiniMeTokenFactory, {overwrite: false}))
     .then(() => deployer.deploy(MiniMeToken, 
         MiniMeTokenFactory.address,
@@ -25,14 +25,14 @@ module.exports = function(deployer, network, accounts) {
         "Test ERC20 Token",
         18,
         "tkn",
-        true
+        true,
+        {overwrite: false}
     ))
-    .then(() => deployer.deploy(TokenGenerator, MiniMeToken.address))
+    .then(() => deployer.deploy(TokenGenerator, MiniMeToken.address, {overwrite: false}))
     .then(() => MiniMeToken.deployed())
     .then(instance => {
         return instance.controller()
         .then(controller => {
-            console.log(controller, TokenGenerator.address);
             if(controller != TokenGenerator.address)
                 return instance.changeController(TokenGenerator.address, {from: controller})
             else

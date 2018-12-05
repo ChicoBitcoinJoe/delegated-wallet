@@ -5067,7 +5067,7 @@
     }
   },
   "schemaVersion": "3.0.0-beta.2",
-  "updatedAt": "2018-12-05T09:03:01.038Z",
+  "updatedAt": "2018-12-05T22:53:09.009Z",
   "devdoc": {
     "details": "A library for a simple unordered list that stores unique values.",
     "methods": {

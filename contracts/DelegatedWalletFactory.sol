@@ -42,6 +42,6 @@ contract DelegatedWalletFactory is IDelegatedWalletFactory, CloneFactory {
         return wallet;
     }
     
-    event CreateWallet_event (address caller, address owner, address wallet);
+    event CreateWallet_event(address indexed caller, address indexed owner, address wallet);
     
 }

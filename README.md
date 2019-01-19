@@ -1,29 +1,22 @@
 # Delegated Wallet
 
-A delegated wallet uses a plugin like approach for letting decentralized applications have access to your wallet. The wallet keeps an internal list of delegates that can transfer ether or any ERC20 token from the wallet. 
+A delegated wallet uses a plugin like approach for letting decentralized applications have access to your wallet. The wallet keeps an internal list of delegates that can be added and removed at will by the wallet owner. A delegate can transfer ether or any ERC20 token from the wallet at any time so it is critical to only add vetted smart contracts as delegates or funds can be stolen. 
+
+```
+	function transfer (address token, address payable recipient, uint amount) public onlyDelegates returns (bool success);
+	unction call(address callAddress, uint callValue, bytes memory callData) public onlyDelegates returns (bool success, bytes memory returnData);
+	function addDelegate(address delegate) public onlyOwner returns (bool success)
+	function removeDelegate(address delegate) public onlyOwner returns (bool success)
+```
 
 | Kovan Contract | Contract Address |
 | --- | --- |
-| ERC20 Token Despenser | 0x9dbF1C4466cD60B61665a6dE09cb018772Ff7aE7 |
-| Delegated Wallet Blueprint | 0x14046A2BE8424DbD4CE78aBcf48cAd7Ed8f87875 |
-| Delegated Wallet Factory | 0x9259EB9081c4f19277cedF87f22B5841E24f7D7d |
-| Delegated Wallet Manager | 0xEd6b8b05dccE7eB37f3A3435beb125f2D3DF76f9 |
+| Address List Lib | 0x3B09fdAE6D5c6C2A5aC1A4F34C11a78B86632aAA |
+| Delegated Wallet Blueprint | 0x80cf81788B463a08b1c7df0C2564ac1dc9AdA8Da |
+| Delegated Wallet Factory | 0xDf3f0E883208345488bAE43Eb642f9f34F000CB8 |
+| Delegated Wallet Manager | 0x9E25Ef3C6e23c9a7095A9968e88Ff09212947A36 |
 
 ## Decentralized Delegates
 
-These "plugins" are completely decentralized and immune to tampering or change. If you don't want users to have to deal with adding/removing delegates you should use the Everchain Payment Delegate.
-
-| Kovan Contract | Contract Address |
-| --- | --- |
-| Recurring Alarm Clock Manager | coming soon |
-| Recurring Payment Scheduler - Simple | coming soon |
-
-## Everchain Payment Delegate
-
-The Everchain Payment Delegate is owned and secured by the Everchain Project but it allows seemless access to new and upgraded contracts for users who would prefer a hands off approach every time a new or better plugin comes along.
-
-*todo: outline security practices*
-
-| Kovan Contract | Contract Address |
-| --- | --- |
-| Everchain Payment Delegate | coming soon |
+1. [Recurring Alarm Clock Scheduler](https://github.com/everchain-project/recurring-alarm-clock) ([demo](https://everchain-project.github.io/recurring-alarm-clock/))
+2. [Recurring Payment Scheduler](https://github.com/everchain-project/recurring-payment-scheduler) (no demo yet)

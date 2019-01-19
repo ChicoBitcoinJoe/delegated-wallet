@@ -2,7 +2,7 @@ pragma solidity ^0.5.0;
 
 import "./external/ERC20.sol";
 import "./external/Owned.sol";
-import "./external/ListLib.sol";
+import "./AddressListLib.sol";
 import "./IDelegatedWallet.sol";
 
 /// @title DelegatedWallet Contract
@@ -11,11 +11,11 @@ import "./IDelegatedWallet.sol";
 ///      the use of delegates. Delegates can transfer funds out of the wallet but cannot add or remove other delegates. 
 contract DelegatedWallet is Owned, IDelegatedWallet {
 
-    using ListLib for ListLib.AddressList; // Import the data structure AddressList from the ListLib contract
+    using AddressListLib for AddressListLib.AddressList; // Import the data structure AddressList from the AddressListLib contract
 
     uint public blockCreated;       // records the block when the contract is created
     address public factory;         // records the factory that deployed this wallet
-    ListLib.AddressList delegates;  // the list of delegates that can call the transfer function
+    AddressListLib.AddressList delegates;  // the list of delegates that can call the transfer function
 
     /// @notice Initializes the wallet. Uses 'initialize()' instead of a constructor to make use of the clone 
     ///         factory at https://github.com/optionality/clone-factory. In general, 'initialize()' should be  
@@ -44,9 +44,7 @@ contract DelegatedWallet is Owned, IDelegatedWallet {
     /// @param recipient The address of the recipient
     /// @param amount The amount of tokens to be transferred
     /// @return True if the transfer was successful
-    function transfer (address token, address payable recipient, uint amount) public returns (bool success) {
-        require(isDelegate(msg.sender), "only a delegate can transfer tokens out of the wallet");
-
+    function transfer (address token, address payable recipient, uint amount) public onlyDelegates returns (bool success) {
         if(token == address(0x0))
             success = recipient.send(amount);
         else
@@ -62,7 +60,7 @@ contract DelegatedWallet is Owned, IDelegatedWallet {
     function call(address callAddress, uint callValue, bytes memory callData) public onlyDelegates returns (bool success, bytes memory returnData) {
         (success, returnData) = callAddress.call.value(callValue)(callData);
 
-        emit Call_event(msg.sender, callAddress, callData, returnData, success);
+        emit Call_event(msg.sender, callAddress, callValue, callData, returnData, success);
     }
 
 ///////////////////////////
@@ -116,6 +114,12 @@ contract DelegatedWallet is Owned, IDelegatedWallet {
         return delegates.array;
     }
 
+    /// @notice Get the current total number of delegates
+    /// @return The total number of delegates
+    function totalDelegates () public view returns (uint) {
+        return delegates.getLength();
+    }
+
     /// @notice Fetch a delegate address at a particular index
     /// @param i The index from which to fetch the delegate address
     /// @return The delegate address at index 'i' 
@@ -129,12 +133,6 @@ contract DelegatedWallet is Owned, IDelegatedWallet {
     /// @return The index of 'delegate' 
     function indexOf (address delegate) public view returns (uint) {
         return delegates.indexOf(delegate);
-    }
-
-    /// @notice Get the current total number of delegates
-    /// @return The total number of delegates
-    function totalDelegates () public view returns (uint) {
-        return delegates.getLength();
     }
 
 ///////////////////////////
@@ -158,7 +156,8 @@ contract DelegatedWallet is Owned, IDelegatedWallet {
     );
     event Call_event(
         address indexed delegate, 
-        address indexed callAddress, 
+        address indexed callAddress,
+        uint callValue,
         bytes callData, 
         bytes returnData, 
         bool success

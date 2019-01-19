@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-import "./external/ListLib.sol";
+import "./AddressListLib.sol";
 import "./IDelegatedWallet.sol";
 
 /// @title DelegatedWalletManager Contract
@@ -8,11 +8,11 @@ import "./IDelegatedWallet.sol";
 /// @dev This contract's goal is to make it easy for anyone to manage existing and new delagated wallets
 contract DelegatedWalletManager {
 
-    using ListLib for ListLib.AddressList;              // Import the data structure AddressList from the ListLib contract
+    using AddressListLib for AddressListLib.AddressList; // Import the data structure AddressList from the AddressListLib contract
 
-    uint public blockCreated;                           // The block the factory was deployed
+    uint public blockCreated; // The block the factory was deployed
     
-    mapping (address => ListLib.AddressList) wallets;   // The list of wallets added by each account
+    mapping (address => AddressListLib.AddressList) wallets;   // The list of wallets added by each account
     
     /// @notice Constructor to create a DelegatedWalletManager
     constructor () public {
@@ -24,10 +24,10 @@ contract DelegatedWalletManager {
     /// @param delegates A list of predefined delegates to add to the wallet
     /// @return True if the wallet was successfully created
     function createWallet (IDelegatedWalletFactory factory, address[] memory delegates) public payable returns (IDelegatedWallet wallet) {
-        wallet = factory.createWallet(msg.sender, delegates);
-        require(address(wallet) != address(0x0));
+        wallet = factory.createWallet.value(msg.value)(msg.sender, delegates);
+        require(address(wallet) != address(0x0), "wallet failed to deploy from factory");
 
-        wallets[msg.sender].add(address(wallet));        
+        wallets[msg.sender].add(address(wallet));
         emit AddWallet_event(msg.sender, address(wallet));
     }
 
@@ -86,7 +86,7 @@ contract DelegatedWalletManager {
         return wallets[account].indexOf(address(wallet));
     }
 
-    event AddWallet_event(address owner, address wallet);
-    event RemoveWallet_event(address owner, address wallet);
+    event AddWallet_event(address indexed owner, address wallet);
+    event RemoveWallet_event(address indexed owner, address wallet);
 
 }

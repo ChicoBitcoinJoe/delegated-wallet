@@ -13,6 +13,7 @@ contract('Delegated Wallet Manager', accounts => {
     var RemovedWallet;
 
     var owner = null;
+    var defaultCaller = accounts[0];
     var delegate = accounts[1];
 
     it("deploy the delegated wallet manager", () => {
@@ -42,18 +43,17 @@ contract('Delegated Wallet Manager', accounts => {
     });
 
     it("create a new wallet", () => {
-        return WalletManager.createWallet(WalletFactory.address, [delegate])
+        return WalletManager.createWallet(WalletFactory.address, [delegate], {from: defaultCaller})
         .then(tx => {
-            //console.log(tx.logs[0].args);
             assert(tx.logs[0].event == "AddWallet_event", "Did not detect addition of new wallet");
             CreatedWallet = tx.logs[0].args.wallet;
             owner = tx.logs[0].args.owner;
-            return WalletManager.getWallets(owner)
+            assert(owner == defaultCaller, "the owner of the wallet should be the default caller")
         })
     });
 
     it("add a wallet", () => {
-        return WalletFactory.createWallet(owner, [delegate])
+        return WalletFactory.createWallet(owner, [delegate], {from: defaultCaller})
         .then(tx => {
             //console.log(tx.logs[0].args)
             assert(tx.logs[0].event == "CreateWallet_event", "Did not detect addition of new wallet");
@@ -116,5 +116,5 @@ contract('Delegated Wallet Manager', accounts => {
             assert(indexOfAddedWallet == 1, "the index of the added wallet should equal 1");
         })
     });
-
+    
 });

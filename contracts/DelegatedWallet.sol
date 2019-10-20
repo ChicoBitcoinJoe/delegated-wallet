@@ -71,9 +71,11 @@ contract DelegatedWallet is IDelegatedWallet, Owned, Clone {
     }
 
     /// @notice Send 'amount' of 'tokens' to 'recipient'
-    /// @param callAddress The address of the token to transfer
-    /// @param callData The address of the recipient
-    /// @return success returns true if the call throws no errors. returnData contains the returned result of the call
+    /// @param callAddress The address of the contract to call
+    /// @param callValue The amount of ether to attach with the call
+    /// @param callData The data to send to the call address
+    /// @return success returns true if the call throws no errors.
+    /// @return returnData contains the returned result of the call
     function call(address callAddress, uint callValue, bytes memory callData) public onlyDelegates returns (bool success, bytes memory returnData) {
         (success, returnData) = callAddress.call.value(callValue)(callData);
 

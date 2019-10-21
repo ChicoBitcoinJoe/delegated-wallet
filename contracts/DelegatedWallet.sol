@@ -250,8 +250,7 @@ contract DelegatedWalletManager is IDelegatedWalletManager {
     function createWallet (IDelegatedWalletFactory factory, address[] memory delegates) public payable returns (IDelegatedWallet wallet) {
         wallet = factory.createWallet.value(msg.value)(msg.sender, delegates);
         require(address(wallet) != address(0x0), "wallet failed to deploy from factory");
-        wallets[msg.sender].add(address(wallet));
-        emit AddWallet_event(msg.sender, address(wallet));
+        addWallet(wallet);
     }
 
     /// @notice Adds a wallet to the account list.

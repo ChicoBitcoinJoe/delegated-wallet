@@ -10,6 +10,6 @@ module.exports = async (deployer, network, accounts) => {
     await deployer.deploy(DelegatedWallet);
     let Blueprint = await DelegatedWallet.deployed();
     await Blueprint.initialize('0x0000000000000000000000000000000000000000');
-    deployer.deploy(DelegatedWalletFactory, DelegatedWallet.address);
-    deployer.deploy(DelegatedWalletManager);
+    await deployer.deploy(DelegatedWalletFactory, DelegatedWallet.address);
+    await deployer.deploy(DelegatedWalletManager);
 };

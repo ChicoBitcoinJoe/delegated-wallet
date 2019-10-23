@@ -62,10 +62,12 @@ contract DelegatedWallet is IDelegatedWallet, Owned, Clone {
     /// @param amount The amount of tokens to be transferred
     /// @return True if the transfer was successful
     function transfer (address payable recipient, address token, uint amount) public onlyDelegates returns (bool success) {
-        if(token == ETHER)
+        if(token == ETHER) {
             success = recipient.send(amount);
-        else
+        }
+        else {
             success = ERC20Token(token).transfer(recipient, amount);
+        }
 
         emit Transfer_event(msg.sender, token, recipient, amount, success);
     }
@@ -76,9 +78,8 @@ contract DelegatedWallet is IDelegatedWallet, Owned, Clone {
     /// @param callData The data to send to the call address
     /// @return success returns true if the call throws no errors.
     /// @return returnData contains the returned result of the call
-    function call(address callAddress, uint callValue, bytes memory callData) public onlyDelegates returns (bool success, bytes memory returnData) {
+    function call (address callAddress, uint callValue, bytes memory callData) public onlyDelegates returns (bool success, bytes memory returnData) {
         (success, returnData) = callAddress.call.value(callValue)(callData);
-
         emit Call_event(msg.sender, callAddress, callValue, callData, returnData, success);
     }
 
@@ -198,8 +199,7 @@ contract DelegatedWallet is IDelegatedWallet, Owned, Clone {
 
 /// @title DelegatedWalletFactory Contract
 /// @author Joseph Reed
-/// @dev The DelegatedWalletFactory makes it easy to deploy delegated wallet. It provides several
-///      helper functions to deploy a wallet in several ways
+/// @dev This contract makes it easy to deploy delegated wallet.
 contract DelegatedWalletFactory is IDelegatedWalletFactory, CloneFactory {
 
     uint public blockCreated;           // The block the factory was deployed
@@ -241,7 +241,7 @@ contract DelegatedWalletFactory is IDelegatedWalletFactory, CloneFactory {
 
 /// @title DelegatedWalletManager Contract
 /// @author Joseph Reed
-/// @dev This contract's goal is to make it easy for anyone to manage existing and new delegated wallets
+/// @dev This contract's goal is to make it easy for anyone to manage new and existing delegated wallets
 contract DelegatedWalletManager is IDelegatedWalletManager {
 
     using AddressListLib for AddressListLib.AddressList; // Import the data structure AddressList from the AddressListLib contract

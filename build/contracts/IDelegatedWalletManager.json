@@ -1,11 +1,11 @@
 {
-  "contractName": "IDelegatedWalletFactory",
+  "contractName": "IDelegatedWalletManager",
   "abi": [
     {
       "constant": false,
       "inputs": [
         {
-          "name": "owner",
+          "name": "factory",
           "type": "address"
         },
         {
@@ -16,16 +16,161 @@
       "name": "createWallet",
       "outputs": [
         {
-          "name": "",
+          "name": "wallet",
           "type": "address"
         }
       ],
       "payable": true,
       "stateMutability": "payable",
       "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "wallet",
+          "type": "address"
+        }
+      ],
+      "name": "addWallet",
+      "outputs": [
+        {
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "wallet",
+          "type": "address"
+        }
+      ],
+      "name": "removeWallet",
+      "outputs": [
+        {
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "getWallets",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "totalWallets",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "name": "wallet",
+          "type": "address"
+        }
+      ],
+      "name": "contains",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "name": "i",
+          "type": "uint256"
+        }
+      ],
+      "name": "getWalletAt",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "name": "wallet",
+          "type": "address"
+        }
+      ],
+      "name": "getIndexOf",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"owner\",\"type\":\"address\"},{\"name\":\"delegates\",\"type\":\"address[]\"}],\"name\":\"createWallet\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/joe/Documents/git/chicobitcoinjoe/delegated-wallet/contracts/DelegatedWallet.sol\":\"IDelegatedWalletFactory\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/joe/Documents/git/chicobitcoinjoe/delegated-wallet/contracts/DelegatedWallet.sol\":{\"keccak256\":\"0x7e6c291d77cf3411d6b91b43a49917727d6e669711c9e8c1ae943f48c81a0a1d\",\"urls\":[\"bzzr://b51f0cbeed9cc00b6d51224bd0ce7ca3109984773ef52b30fd40decc049094b3\"]},\"/home/joe/Documents/git/chicobitcoinjoe/delegated-wallet/contracts/external/AddressList.sol\":{\"keccak256\":\"0xf8e57772b41c893167b002e591524d7b15c506ad73b05f5b1cba54710336c3ee\",\"urls\":[\"bzzr://d5ae87d11169c04f57eea8b97fa68d1c1983681c60f127edf77228d273365283\"]},\"/home/joe/Documents/git/chicobitcoinjoe/delegated-wallet/contracts/external/CloneFactory.sol\":{\"keccak256\":\"0x488df45957da102c8332ceb58e595ef2817e3966553d265f436f1876b6afb7dd\",\"urls\":[\"bzzr://5b0091c83a78290419be4065f959896e554ddd954c09ea2dda511552d3969267\"]},\"/home/joe/Documents/git/chicobitcoinjoe/delegated-wallet/contracts/external/ERC20Token.sol\":{\"keccak256\":\"0x7863cd87a77a737786106ffa8a0c681ede15d47b3497fee9259c304cfccd99b3\",\"urls\":[\"bzzr://4d04c4d9b9802ed39ac0999b50c211d6e1e11e7daecad08393dc51b7e6083847\"]},\"/home/joe/Documents/git/chicobitcoinjoe/delegated-wallet/contracts/external/Owned.sol\":{\"keccak256\":\"0xf07d9c00dd96a24ecc941953d81f999a01c5e2cdd748c3d3d1e86043a943c838\",\"urls\":[\"bzzr://4f1222fd59be816834871b7c68904cb6133b3ee1879458c6924339a85aa3dee3\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"factory\",\"type\":\"address\"},{\"name\":\"delegates\",\"type\":\"address[]\"}],\"name\":\"createWallet\",\"outputs\":[{\"name\":\"wallet\",\"type\":\"address\"}],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"account\",\"type\":\"address\"},{\"name\":\"i\",\"type\":\"uint256\"}],\"name\":\"getWalletAt\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"account\",\"type\":\"address\"}],\"name\":\"totalWallets\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"account\",\"type\":\"address\"}],\"name\":\"getWallets\",\"outputs\":[{\"name\":\"\",\"type\":\"address[]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"wallet\",\"type\":\"address\"}],\"name\":\"removeWallet\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"account\",\"type\":\"address\"},{\"name\":\"wallet\",\"type\":\"address\"}],\"name\":\"getIndexOf\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"account\",\"type\":\"address\"},{\"name\":\"wallet\",\"type\":\"address\"}],\"name\":\"contains\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"wallet\",\"type\":\"address\"}],\"name\":\"addWallet\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/joe/Documents/git/chicobitcoinjoe/delegated-wallet/contracts/DelegatedWallet.sol\":\"IDelegatedWalletManager\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/joe/Documents/git/chicobitcoinjoe/delegated-wallet/contracts/DelegatedWallet.sol\":{\"keccak256\":\"0x7e6c291d77cf3411d6b91b43a49917727d6e669711c9e8c1ae943f48c81a0a1d\",\"urls\":[\"bzzr://b51f0cbeed9cc00b6d51224bd0ce7ca3109984773ef52b30fd40decc049094b3\"]},\"/home/joe/Documents/git/chicobitcoinjoe/delegated-wallet/contracts/external/AddressList.sol\":{\"keccak256\":\"0xf8e57772b41c893167b002e591524d7b15c506ad73b05f5b1cba54710336c3ee\",\"urls\":[\"bzzr://d5ae87d11169c04f57eea8b97fa68d1c1983681c60f127edf77228d273365283\"]},\"/home/joe/Documents/git/chicobitcoinjoe/delegated-wallet/contracts/external/CloneFactory.sol\":{\"keccak256\":\"0x488df45957da102c8332ceb58e595ef2817e3966553d265f436f1876b6afb7dd\",\"urls\":[\"bzzr://5b0091c83a78290419be4065f959896e554ddd954c09ea2dda511552d3969267\"]},\"/home/joe/Documents/git/chicobitcoinjoe/delegated-wallet/contracts/external/ERC20Token.sol\":{\"keccak256\":\"0x7863cd87a77a737786106ffa8a0c681ede15d47b3497fee9259c304cfccd99b3\",\"urls\":[\"bzzr://4d04c4d9b9802ed39ac0999b50c211d6e1e11e7daecad08393dc51b7e6083847\"]},\"/home/joe/Documents/git/chicobitcoinjoe/delegated-wallet/contracts/external/Owned.sol\":{\"keccak256\":\"0xf07d9c00dd96a24ecc941953d81f999a01c5e2cdd748c3d3d1e86043a943c838\",\"urls\":[\"bzzr://4f1222fd59be816834871b7c68904cb6133b3ee1879458c6924339a85aa3dee3\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
@@ -22512,7 +22657,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.16",
-  "updatedAt": "2019-10-23T00:19:32.884Z",
+  "updatedAt": "2019-10-23T00:19:32.889Z",
   "devdoc": {
     "methods": {}
   },

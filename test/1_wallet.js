@@ -1,19 +1,15 @@
-const DelegatedWalletBlueprint = artifacts.require("DelegatedWallet");
-const MiniMeToken = artifacts.require("MiniMeToken");
-const TokenGenerator = artifacts.require("TokenGenerator");
+const DelegatedWalletArtifact = artifacts.require("DelegatedWallet");
+const MiniMeTokenArtifact = artifacts.require("MiniMeToken");
+const MiniMeTokenFactoryArtifact = artifacts.require("MiniMeTokenFactory");
 
 contract('Delegated Wallet Blueprint', accounts => {
-    
-    const ETHER = '0x0000000000000000000000000000000000000000';
 
-    function ether (valueInEther) {
-        return web3.utils.toWei(valueInEther.toString(), 'ether');
-    }
+    const ETHER = '0x0000000000000000000000000000000000000000';
 
     // Contracts
     var DelegatedWallet;
     var TokenDespenser;
-    var Token;
+    var TestToken;
 
     // Accounts
     var defaultCaller = accounts[0];
@@ -27,50 +23,21 @@ contract('Delegated Wallet Blueprint', accounts => {
     // Receipts
     var initTx;
 
-    it("initialize the delegated wallet blueprint", () => {
-        return DelegatedWalletBlueprint.new()
-        .then(instance => {
-            DelegatedWallet = instance;
-            return DelegatedWallet.initialize(owner, {from: defaultCaller});
-        })
-        .then(tx => {
-            initTx = tx;
-            return TokenGenerator.deployed()
-        })
-        .then(instance => {
-            TokenDespenser = instance;
-            
-            return Promise.all([
-                TokenDespenser.token(),
-                web3.eth.sendTransaction({to: DelegatedWallet.address, from: defaultCaller, value: ether(1)}),
-                TokenDespenser.generateTokens(DelegatedWallet.address, ether(1), {from: defaultCaller}),
-            ]);
-        })
-        .then(promises => {
-            token = promises[0];
-            return MiniMeToken.at(token)
-        })
-        .then(instance => {
-            Token = instance;
-            
-            return Promise.all([
-                web3.eth.getBalance(DelegatedWallet.address),
-                Token.balanceOf(DelegatedWallet.address),
-                DelegatedWallet.owner(),
-                DelegatedWallet.blockCreated(),
-            ]);
-        })
-        .then(promises => {
-            var etherBalance = promises[0];
-            var tokenBalance = promises[1];
-            var walletOwner = promises[2];
-            var blockCreated = promises[3];
-
-            assert(etherBalance == ether(1), "wallet ether balance should equal one ether");
-            assert(tokenBalance == ether(1), "wallet erc20 token balance should equal 10^18 (one ether)");
-            assert(owner == walletOwner, "wallet owner failed to set properly");
-            assert(blockCreated == initTx.receipt.blockNumber, "delegated wallet should be initialized");
-        })
+    it("deploy a delegated wallet", async () => {
+        DelegatedWallet = await DelegatedWalletArtifact.new();
+        initTx = await DelegatedWallet.initialize(owner);
+        await web3.eth.sendTransaction({to: DelegatedWallet.address, from: defaultCaller, value: ether(1)});
+        let TokenFactory = await MiniMeTokenFactoryArtifact.new();
+        TestToken = await createToken('Test Token', 'test', 18, TokenFactory.address);
+        await TestToken.generateTokens(DelegatedWallet.address, ether(1));
+        let etherBalance = await web3.eth.getBalance(DelegatedWallet.address);
+        let tokenBalance = await TestToken.balanceOf(DelegatedWallet.address);
+        let walletOwner = await DelegatedWallet.owner();
+        let blockCreated = await DelegatedWallet.blockInitialized();
+        assert(etherBalance == ether(1), "wallet ether balance should equal one ether");
+        assert(tokenBalance == ether(1), "wallet erc20 token balance should equal 10^18 (one ether)");
+        assert(owner == walletOwner, "wallet owner failed to set properly");
+        assert(blockCreated == initTx.receipt.blockNumber, "delegated wallet should be initialized");
     });
 
     it("have the owner add delegates", () => {
@@ -79,7 +46,7 @@ contract('Delegated Wallet Blueprint', accounts => {
             DelegatedWallet.addDelegate(delegate1, {from: owner}),
             DelegatedWallet.addDelegate(delegate2, {from: owner}),
         ]).then(txs => {
-            return DelegatedWallet.getDelegates();
+            return DelegatedWallet.getDelegateList();
         })
         .then(delegates => {
             assert(delegates[0] == delegate0, "delegates[0] should be set to delegate0");
@@ -91,7 +58,7 @@ contract('Delegated Wallet Blueprint', accounts => {
     it("have the owner remove a delegate", () => {
         return DelegatedWallet.removeDelegate(delegate0, {from: owner})
         .then(txs => {
-            return DelegatedWallet.getDelegates();
+            return DelegatedWallet.getDelegateList();
         })
         .then(delegates => {
             assert(delegates[0] == delegate2, "delegates[0] should be set to delegate2");
@@ -101,11 +68,11 @@ contract('Delegated Wallet Blueprint', accounts => {
 
     it("have a delegate transfer ether from the wallet", () => {
         var recipientStartBalance;
-        
+
         return web3.eth.getBalance(recipient)
         .then(recipientBalance => {
             recipientStartBalance = Number(web3.utils.fromWei(recipientBalance, "ether"));
-            return DelegatedWallet.transfer(ETHER, recipient, ether(.5), {from: delegate1})
+            return DelegatedWallet.transfer(recipient, ETHER, ether(.5), {from: delegate1})
         })
         .then(tx => {
             return Promise.all([
@@ -127,14 +94,14 @@ contract('Delegated Wallet Blueprint', accounts => {
     it("have a delegate transfer erc20 tokens from the wallet", () => {
         var oldBalance;
 
-        return Token.balanceOf(recipient)
+        return TestToken.balanceOf(recipient)
         .then(tokenBalance => {
             oldBalance = tokenBalance;
-            return DelegatedWallet.transfer(Token.address, recipient, ether(.5), {from: delegate1})
+            return DelegatedWallet.transfer(recipient, TestToken.address, ether(.5), {from: delegate1})
         })
         .then(tx => Promise.all([
-            Token.balanceOf(DelegatedWallet.address),
-            Token.balanceOf(recipient),
+            TestToken.balanceOf(DelegatedWallet.address),
+            TestToken.balanceOf(recipient),
         ]))
         .then(balances => {
             var walletBalance = balances[0];
@@ -166,11 +133,11 @@ contract('Delegated Wallet Blueprint', accounts => {
     });
 
     it("fail to transfer erc20 tokens from the delegated wallet", () => {
-        return DelegatedWallet.transfer(Token.address, attacker, ether(.25), {from: attacker})
+        return DelegatedWallet.transfer(attacker, TestToken.address, ether(.25), {from: attacker})
         .then(tx => {
             assert(false, "attacker should not be able to send erc20 tokens")
         })
-        .catch(err => Token.balanceOf(DelegatedWallet.address))
+        .catch(err => TestToken.balanceOf(DelegatedWallet.address))
         .then(tokenBalance => {
             assert(tokenBalance == ether(.5), "wallet token balance should equal half an ether");
         })
@@ -195,7 +162,7 @@ contract('Delegated Wallet Blueprint', accounts => {
             // expected outcome
         })
     });
-    
+
     it("fail to transfer wallet ownership", () => {
         return DelegatedWallet.removeDelegate(attacker, {from: attacker})
         .then(tx => {
@@ -205,5 +172,23 @@ contract('Delegated Wallet Blueprint', accounts => {
             // expected outcome
         })
     });
+
+    function ether (valueInEther) {
+        return web3.utils.toWei(valueInEther.toString(), 'ether');
+    }
+
+    async function createToken (name, symbol, decimals, factoryAddress) {
+        let Token = await MiniMeTokenArtifact.new(
+            factoryAddress,
+            '0x0000000000000000000000000000000000000000',
+            0,
+            name,
+            decimals,
+            symbol,
+            true
+        );
+
+        return Token;
+    }
 
 });

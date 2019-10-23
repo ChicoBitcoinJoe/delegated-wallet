@@ -28,7 +28,7 @@ contract('Delegated Wallet Manager', accounts => {
         })
         .then(instance => {
             WalletManager = instance;
-            
+
             return Promise.all([
                 web3.eth.getTransactionReceipt(WalletManager.transactionHash),
                 WalletManager.blockCreated(),
@@ -88,10 +88,10 @@ contract('Delegated Wallet Manager', accounts => {
             WalletManager.contains(owner, CreatedWallet),
             WalletManager.contains(owner, AddedWallet),
             WalletManager.contains(owner, RemovedWallet),
-            WalletManager.index(owner, 0),
-            WalletManager.index(owner, 1),
-            WalletManager.indexOf(owner, CreatedWallet),
-            WalletManager.indexOf(owner, AddedWallet),
+            WalletManager.getWalletAt(owner, 0),
+            WalletManager.getWalletAt(owner, 1),
+            WalletManager.getIndexOf(owner, CreatedWallet),
+            WalletManager.getIndexOf(owner, AddedWallet),
         ])
         .then(promises => {
             var walletArray = promises[0];
@@ -116,5 +116,5 @@ contract('Delegated Wallet Manager', accounts => {
             assert(indexOfAddedWallet == 1, "the index of the added wallet should equal 1");
         })
     });
-    
+
 });

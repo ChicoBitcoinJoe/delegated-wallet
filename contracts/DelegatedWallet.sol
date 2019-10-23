@@ -89,21 +89,33 @@ contract DelegatedWallet is IDelegatedWallet, Owned, Clone {
     /// @notice Add a new delegate to the list of delegates
     /// @param delegate The address of the new delegate
     /// @return True if the delegate was successfully added
-    function addDelegate(address delegate) public onlyOwner returns (bool success) {
+    function addDelegate (address delegate) public onlyOwner returns (bool success) {
         success = delegates.add(delegate);
-
-        if(success)
-            emit AddDelegate_event(delegate);
+        if(success) emit AddDelegate_event(delegate);
     }
 
     /// @notice Remove an existing delegate from the list of delegates
     /// @param delegate The address of an existing delegate
     /// @return True if the delegate was successfully removed
-    function removeDelegate(address delegate) public onlyOwner returns (bool success) {
+    function removeDelegate (address delegate) public onlyOwner returns (bool success) {
         success = delegates.remove(delegate);
+        if(success) emit RemoveDelegate_event(delegate);
+    }
 
-        if(success)
-            emit RemoveDelegate_event(delegate);
+    /// @notice Add a new delegate to the list of delegates
+    /// @param delegateList The list of addresses to set as delegates
+    function addDelegates (address[] memory delegateList) public onlyOwner {
+        for (uint i = 0; i < delegateList.length; i++) {
+            addDelegate(delegateList[i]);
+        }
+    }
+
+    /// @notice Remove an existing delegate from the list of delegates
+    /// @param delegateList The list of addresses to set as delegates
+    function removeDelegates (address[] memory delegateList) public onlyOwner {
+        for (uint i = 0; i < delegateList.length; i++) {
+            removeDelegate(delegateList[i]);
+        }
     }
 
     ///////////////////////////
@@ -268,6 +280,24 @@ contract DelegatedWalletManager is IDelegatedWalletManager {
         success = wallets[msg.sender].remove(address(wallet));
         if(success)
             emit RemoveWallet_event(msg.sender, address(wallet));
+    }
+
+    /// @notice Adds a wallet to the account list.
+    /// @param walletList The delegated wallet to add to the account list
+    /// @return True if the wallet was successfully added
+    function addWallets (IDelegatedWallet[] memory walletList) public {
+        for (uint i = 0; i < walletList.length; i++) {
+            addWallet(walletList[i]);
+        }
+    }
+
+    /// @notice Removes a wallet from the account list.
+    /// @param walletList The delegated wallet to remove from the account list
+    /// @return True if the wallet was successfully removed
+    function removeWallets (IDelegatedWallet[] memory walletList) public {
+        for (uint i = 0; i < walletList.length; i++) {
+            removeWallet(walletList[i]);
+        }
     }
 
     /// @notice Fetches a wallet list from a given account.

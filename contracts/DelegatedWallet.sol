@@ -61,7 +61,7 @@ contract DelegatedWallet is IDelegatedWallet, Owned, Clone {
     /// @param recipient The address of the recipient
     /// @param amount The amount of tokens to be transferred
     /// @return True if the transfer was successful
-    function transfer (address payable recipient, address token, uint amount) public onlyDelegates returns (bool success) {
+    function transfer (address token, address payable recipient, uint amount) public onlyDelegates returns (bool success) {
         if(token == ETHER) {
             success = recipient.send(amount);
         }

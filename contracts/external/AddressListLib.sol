@@ -1,23 +1,5 @@
 pragma solidity ^0.5.0;
 
-import "./CloneFactory.sol";
-import "./Owned.sol";
-
-contract IAddressList {
-    function add (address value) public returns (bool success);
-    function remove (address value) public returns (bool success);
-    function contains (address value) public view returns (bool);
-    function getValueAt (uint i) public view returns (address);
-    function getIndexOf (address value) public view returns (uint);
-    function getList () public view returns (address[] memory);
-    function getLength () public view returns (uint);
-}
-
-contract IAddressListFactory {
-    function createEmptyList (address owner) public returns (IAddressList);
-    function createFromList (address owner, address[] memory items) public returns (IAddressList);
-}
-
 /// @dev A library for a simple unordered list that stores unique values.
 library AddressListLib {
 
@@ -105,80 +87,5 @@ library AddressListLib {
     function getLength (AddressList storage list) public view returns (uint) {
         return list.array.length;
     }
-
-}
-
-contract AddressList is IAddressList, Owned, Clone {
-
-    using AddressListLib for AddressListLib.AddressList;
-
-    AddressListLib.AddressList list;
-
-    function initialize (address _owner) public requireNotInitialized {
-        owner = _owner;
-    }
-
-    function add (address item) public onlyOwner returns (bool success) {
-        success = list.add(item);
-        if(success) emit Add_event(item);
-    }
-
-    function remove (address item) public onlyOwner returns (bool success) {
-        success = list.remove(item);
-        if(success) emit Remove_event(item);
-    }
-
-    function contains (address item) public view returns (bool) {
-        return list.contains(item);
-    }
-
-    function getValueAt (uint i) public view returns (address) {
-        return list.getValueAt(i);
-    }
-
-    function getIndexOf (address item) public view returns (uint){
-        return list.getIndexOf(item);
-    }
-
-    function getList () public view returns (address[] memory) {
-        return list.array;
-    }
-
-    function getLength () public view returns (uint) {
-        return list.getLength();
-    }
-
-    event Add_event(address item);
-    event Remove_event(address item);
-
-}
-
-contract AddressListFactory is IAddressListFactory, CloneFactory {
-
-    AddressList public Blueprint;
-
-    constructor (AddressList _Blueprint) public {
-        Blueprint = _Blueprint;
-    }
-
-    function createEmptyList (address owner) public returns (IAddressList) {
-        AddressList List = AddressList(createClone(address(Blueprint)));
-        List.initialize(owner);
-        emit Create_event (owner, List);
-        return List;
-    }
-
-    function createFromList (address owner, address[] memory items) public returns (IAddressList) {
-        AddressList List = AddressList(createClone(address(Blueprint)));
-        List.initialize(address(this));
-        for(uint i = 0; i < items.length; i++) {
-            List.add(items[i]);
-        }
-        List.transferOwnership(owner);
-        emit Create_event (owner, List);
-        return List;
-    }
-
-    event Create_event (address owner, AddressList list);
 
 }

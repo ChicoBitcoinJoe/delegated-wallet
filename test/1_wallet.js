@@ -72,7 +72,7 @@ contract('Delegated Wallet Blueprint', accounts => {
         return web3.eth.getBalance(recipient)
         .then(recipientBalance => {
             recipientStartBalance = Number(web3.utils.fromWei(recipientBalance, "ether"));
-            return DelegatedWallet.transfer(recipient, ETHER, ether(.5), {from: delegate1})
+            return DelegatedWallet.transfer(ETHER, recipient, ether(.5), {from: delegate1})
         })
         .then(tx => {
             return Promise.all([
@@ -97,7 +97,7 @@ contract('Delegated Wallet Blueprint', accounts => {
         return TestToken.balanceOf(recipient)
         .then(tokenBalance => {
             oldBalance = tokenBalance;
-            return DelegatedWallet.transfer(recipient, TestToken.address, ether(.5), {from: delegate1})
+            return DelegatedWallet.transfer(TestToken.address, recipient, ether(.5), {from: delegate1})
         })
         .then(tx => Promise.all([
             TestToken.balanceOf(DelegatedWallet.address),
@@ -133,7 +133,7 @@ contract('Delegated Wallet Blueprint', accounts => {
     });
 
     it("fail to transfer erc20 tokens from the delegated wallet", () => {
-        return DelegatedWallet.transfer(attacker, TestToken.address, ether(.25), {from: attacker})
+        return DelegatedWallet.transfer(TestToken.address, attacker, ether(.25), {from: attacker})
         .then(tx => {
             assert(false, "attacker should not be able to send erc20 tokens")
         })

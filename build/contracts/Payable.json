@@ -1,31 +1,13 @@
 {
-  "contractName": "IDelegatedWalletFactory",
+  "contractName": "Payable",
   "abi": [
     {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "owner",
-          "type": "address"
-        },
-        {
-          "name": "delegates",
-          "type": "address[]"
-        }
-      ],
-      "name": "createWallet",
-      "outputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
       "payable": true,
       "stateMutability": "payable",
-      "type": "function"
+      "type": "fallback"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"owner\",\"type\":\"address\"},{\"name\":\"delegates\",\"type\":\"address[]\"}],\"name\":\"createWallet\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/joe/Documents/git/chicobitcoinjoe/delegated-wallet/contracts/Interfaces.sol\":\"IDelegatedWalletFactory\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/joe/Documents/git/chicobitcoinjoe/delegated-wallet/contracts/Interfaces.sol\":{\"keccak256\":\"0x2bbc7fa6dd4bbabe3a2437ac124c1ca4e97f1e93c7509523798d885bcf05b8cc\",\"urls\":[\"bzzr://55d2bbc668aae40edfdf410f77429e4d4c04a1d87c39e6ce1e1aa6abcd79d115\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"fallback\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/joe/Documents/git/chicobitcoinjoe/delegated-wallet/contracts/Interfaces.sol\":\"Payable\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/joe/Documents/git/chicobitcoinjoe/delegated-wallet/contracts/Interfaces.sol\":{\"keccak256\":\"0x2bbc7fa6dd4bbabe3a2437ac124c1ca4e97f1e93c7509523798d885bcf05b8cc\",\"urls\":[\"bzzr://55d2bbc668aae40edfdf410f77429e4d4c04a1d87c39e6ce1e1aa6abcd79d115\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
@@ -3258,7 +3240,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.16",
-  "updatedAt": "2019-11-06T21:47:41.952Z",
+  "updatedAt": "2019-11-06T21:47:41.953Z",
   "devdoc": {
     "methods": {}
   },

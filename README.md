@@ -12,6 +12,6 @@ function isDelegate (address _address) public view returns (bool success);
 | Kovan Contract | Contract Address |
 | --- | --- |
 | Address List Lib | 0x2605524186207E6f933aA63647Ab3Ae7803923a4 |
-| Delegated Wallet Blueprint | 0x40981163D09F654f20cAD34E85deC377534E5445 |
-| Delegated Wallet Factory | 0x1DC4ebA1883dcAA61bb585A5729d29D693bc443B |
-| Delegated Wallet Manager | 0x84C4C1be0184a58cebbFaC2779d7088567a388C4 |
+| Delegated Wallet Blueprint | 0x4f2acC21b7Ba2d225b16F220F03b72F5C6ed7013 |
+| Delegated Wallet Factory | 0x142d44A4a1b281Ba3b9979a4F21B515477105189 |
+| Delegated Wallet Manager | 0x05f1d50Cc81CAd13e0927AaE133f83B6fE681AA3 |
